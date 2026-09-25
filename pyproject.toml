@@ -1,0 +1,37 @@
+[build-system]
+requires = ["hatchling>=1.25"]
+build-backend = "hatchling.build"
+
+[project]
+name = "signaldesk-notification-worker"
+version = "0.1.0"
+description = "Lease-fenced SignalDesk notification orchestration worker."
+readme = "README.md"
+requires-python = ">=3.11,<3.12"
+dependencies = [
+  "httpx>=0.28,<1",
+  "pydantic>=2.8,<3",
+  "pydantic-settings>=2.10,<3",
+  "redis>=6.4,<7",
+  "signaldesk-contracts==0.2.0",
+  "signaldesk-service-kit==0.1.0",
+  "signaldesk-streams-kit==0.1.0",
+]
+
+[dependency-groups]
+dev = ["pytest>=8.3,<9"]
+
+[tool.uv.sources]
+signaldesk-contracts = { path = "../signaldesk-contracts" }
+signaldesk-service-kit = { path = "../signaldesk-service-kit" }
+signaldesk-streams-kit = { path = "../signaldesk-streams-kit" }
+
+[project.scripts]
+signaldesk-notification-worker = "signaldesk_notification_worker.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/signaldesk_notification_worker"]
+
+[tool.pytest.ini_options]
+addopts = "-ra"
+testpaths = ["tests"]
